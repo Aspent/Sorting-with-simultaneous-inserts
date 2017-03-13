@@ -6,29 +6,33 @@ namespace TestingLab1
     {
         static void Main()
         {
-            var sort = new SimultaneousInsertionSort();
-            var seq = new ArrayGenerator().Generate(20);
-            int[] seq1 = new int[20];
-            Array.Copy(seq, seq1, seq.Length);
-            foreach (var elem in seq)
+            var sort = new SimultaneousInsertionSort<Data>(4);
+            var count = 10;
+            var seq = new DataArrayGenerator().Generate(count);
+
+            foreach (var t in seq)
             {
-                Console.Write("{0} ", elem);
+                Console.Write("({0} {1}) ", t.Index, t.Value);
             }
+            Console.WriteLine();
+            var result = sort.Sort(seq);
+            foreach (var t in result)
+            {
+                Console.Write("({0} {1}) ", t.Index, t.Value);
+            }
+            Console.WriteLine();
+            Array.Sort(seq);
+            foreach (var t in seq)
+            {
+                Console.Write("({0} {1}) ", t.Index, t.Value);
+            }
+
+
+
             Console.WriteLine();
 
-            sort.Sort(seq, 3);
 
-            foreach (var elem in seq)
-            {
-                Console.Write("{0} ", elem);
-            }
-            Console.WriteLine();
-            Array.Sort(seq1);
-            foreach (var elem in seq1)
-            {
-                Console.Write("{0} ", elem);
-            }
-            Console.WriteLine();
+
             Console.Read();
         }
     }

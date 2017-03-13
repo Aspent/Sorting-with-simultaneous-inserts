@@ -1,12 +1,28 @@
-﻿namespace TestingLab1
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace TestingLab1
 {
-    class SimultaneousInsertionSort
+    public class SimultaneousInsertionSort<T> where T : IComparable<T>
     {
-        public void SortGroups(int[] sequence, int count)
+        private int _count;
+
+        public SimultaneousInsertionSort(int count)
+        {
+            _count = count;
+        }
+
+        public int Count
+        {
+            get { return _count; }
+        }
+
+        private void SortGroups(T[] sequence, int count)
         {
             var groupsCount = sequence.Length / count;
             var rest = sequence.Length % count;
-            var insSort = new InsertionSort();
+            var insSort = new InsertionSort<T>();
             for (var i = 0; i < groupsCount; i++)
             {
                 insSort.SortRange(sequence, i * count, count);
@@ -14,7 +30,7 @@
             insSort.SortRange(sequence, groupsCount * count, rest);
         }
 
-        public void MoveRightSeveralElements(int[] sequence, int index, int count, int shift)
+        private void MoveRightSeveralElements(T[] sequence, int index, int count, int shift)
         {
             for (var i = count-1; i >= 0; i--)
             {
@@ -22,7 +38,7 @@
             }
         }
 
-        public void Place(int[] sequence, int[] elems, int index, int count)
+        private void Place(T[] sequence, T[] elems, int index, int count)
         {
             for (var i = 0; i < count; i++)
             {
@@ -30,11 +46,11 @@
             }
         }
 
-        public void InsertGroup(int[] sequence, int startIndex, int count)    
+        private void InsertGroup(T[] sequence, int startIndex, int count)    
         {
             var elemsCount = count;
             var j = startIndex;
-            var elems = new int[elemsCount];
+            var elems = new T[elemsCount];
             for (var k = 0; k < elemsCount; k++)
             {
                 elems[k] = sequence[startIndex + k];
@@ -44,7 +60,7 @@
             {
                 var lastElem = elems[elemsCount - 1];
                 var shiftsCount = 0;
-                while ((j > 0) && (sequence[j - 1] > lastElem))
+                while ((j > 0) && (lastElem.CompareTo(sequence[j-1]) == -1)) 
                 {
                     j--;
                     shiftsCount++;
@@ -55,18 +71,22 @@
             }
         }
 
-        public void Sort(int[] sequence, int count)
+        public IEnumerable<T> Sort(IEnumerable<T> sequence)
         {
-            var groupsCount = sequence.Length/count;
-            var rest = sequence.Length%count;
-            SortGroups(sequence, count);
+            var seq = sequence.ToArray();
+
+            var groupsCount = seq.Length / _count;
+            var rest = seq.Length % _count;
+            SortGroups(seq, _count);
 
             for (var i = 1; i < groupsCount; i++)
             {
-                var index = i*count;
-                InsertGroup(sequence, index, count);
+                var index = i * _count;
+                InsertGroup(seq, index, _count);
             }
-            InsertGroup(sequence, sequence.Length-rest, rest);
+            InsertGroup(seq, seq.Length - rest, rest);
+
+            return seq;
         }
     }
 }

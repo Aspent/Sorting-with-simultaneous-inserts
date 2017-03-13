@@ -2,7 +2,7 @@
 
 namespace TestingLab1
 {
-    class ArrayGenerator
+    public class ArrayGenerator
     {
         public int[] Generate(int count)
         {
@@ -10,7 +10,7 @@ namespace TestingLab1
             var rand = new Random();
             for (var i = 0; i < count; i++)
             {
-                array[i] = rand.Next(100);
+                array[i] = rand.Next(400000);
             }
 
             return array;
